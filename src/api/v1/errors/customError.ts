@@ -4,5 +4,5 @@ export abstract class CustomError extends Error {
     super(message);
   }
 
-  abstract serializeErrors(): { message: string; field?: string[] }[];
+  abstract serializeErrors(): { message: string; field?: string }[];
 }
