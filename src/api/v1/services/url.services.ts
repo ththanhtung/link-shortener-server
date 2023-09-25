@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import { BadRequestError } from '../errors/badReqError';
 import { URL } from '../models/url.model';
 import { NotFoundError } from '../errors/notFoundError';
 

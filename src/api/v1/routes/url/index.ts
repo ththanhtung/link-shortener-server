@@ -7,7 +7,7 @@ const urlRoutes = express.Router();
 
 urlRoutes.post(
   '/url',
-  [body('fullLink').notEmpty().withMessage('you must provide a link')],
+  [body('fullLink').notEmpty().isURL().withMessage('you must provide a valid link')],
   validateRequest,
   URLControllers.createNewShortenLink
 );
