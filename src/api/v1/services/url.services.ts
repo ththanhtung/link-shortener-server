@@ -70,6 +70,9 @@ export class URLServices {
     };
   }
   static async deleteLink(shortenLink: string) {
+    if (shortenLink === '') {
+      throw new NotFoundError();
+    }
     const deletedLink = await URL.findOneAndDelete({
       url_shorten_link: shortenLink,
     });
@@ -80,8 +83,8 @@ export class URLServices {
     };
   }
   static async deActiveLink(shortenLink: string) {
-    if (shortenLink === ''){
-        throw new NotFoundError()
+    if (shortenLink === '') {
+      throw new NotFoundError();
     }
     const updatedLink = await URL.findOneAndUpdate(
       {
@@ -104,9 +107,9 @@ export class URLServices {
   }
 
   static async activeLink(shortenLink: string) {
-     if (shortenLink === '') {
-       throw new NotFoundError();
-     }
+    if (shortenLink === '') {
+      throw new NotFoundError();
+    }
     const updatedLink = await URL.findOneAndUpdate(
       {
         url_shorten_link: shortenLink,
