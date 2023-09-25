@@ -12,6 +12,8 @@ urlRoutes.post(
   URLControllers.createNewShortenLink
 );
 
+urlRoutes.get('/url/all', URLControllers.getLinks);
 urlRoutes.get('/url/:shortenLink', URLControllers.redirectShortenLink);
+urlRoutes.patch('/url/:shortenLink', URLControllers.updateLink)
 
 export default urlRoutes;

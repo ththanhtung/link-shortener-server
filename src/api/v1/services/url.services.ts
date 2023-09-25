@@ -1,41 +1,73 @@
-import { nanoid } from "nanoid"
-import { BadRequestError } from "../errors/badReqError"
-import { URL } from "../models/url.model"
-import { NotFoundError } from "../errors/notFoundError"
+import { nanoid } from 'nanoid';
+import { BadRequestError } from '../errors/badReqError';
+import { URL } from '../models/url.model';
+import { NotFoundError } from '../errors/notFoundError';
 
-interface INewShortenLinkReq{
-    fullLink: string
+interface INewShortenLinkReq {
+  fullLink: string;
 }
- 
+interface INewShortenLinkUpdateReq {
+  shortenLink: string;
+  fullLink: string;
+}
+
 export class URLServices {
-    static async createNewShortenLink(req: INewShortenLinkReq){
-        const shortID = nanoid(8) 
-        const newShortenLink = await URL.build({
-            url_full_link: req.fullLink,
-            url_shorten_link: shortID
-        })
+  static async createNewShortenLink(req: INewShortenLinkReq) {
+    const shortID = nanoid(8);
+    const newShortenLink = await URL.build({
+      url_full_link: req.fullLink,
+      url_shorten_link: shortID,
+    });
 
-        newShortenLink.save()
-        
-        return{
-            metadata: {
-                link: newShortenLink
-            }
-        }
+    newShortenLink.save();
+
+    return {
+      metadata: {
+        link: newShortenLink,
+      },
+    };
+  }
+
+  static async redirectShortenLink(shortenLink: string) {
+    if (shortenLink === '') {
+      throw new NotFoundError();
+    }
+    const link = await URL.findOne({
+      url_shorten_link: shortenLink,
+    }).lean();
+
+    if (!link) {
+      throw new NotFoundError();
     }
 
-    static async redirectShortenLink(shortenLink: string){
-        if (shortenLink === ''){
-            throw new NotFoundError()
-        }
-        const link = await URL.findOne({
-            url_shorten_link: shortenLink
-        }).lean()
+    return link.url_full_link;
+  }
 
-        if (!link){
-            throw new NotFoundError()
-        }
+  static async getLinks() {
+    const links = await URL.find({});
+    return {
+      metadata: {
+        links,
+      },
+    };
+  }
+  static async updateLink(req: INewShortenLinkUpdateReq) {
+    const newLink = await URL.findOneAndUpdate(
+      { url_shorten_link: req.shortenLink },
+      {
+        $set: {
+          url_full_link: req.fullLink,
+        },
+      },
+      {
+        new: true,
 
-        return link.url_full_link
-    }
+      }
+    );
+    return {
+      metadata: {
+        link: newLink,
+      },
+    };
+  }
 }
