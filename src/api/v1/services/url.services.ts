@@ -61,12 +61,21 @@ export class URLServices {
       },
       {
         new: true,
-
       }
     );
     return {
       metadata: {
         link: newLink,
+      },
+    };
+  }
+  static async deleteLink(shortenLink: string) {
+    const deletedLink = await URL.findOneAndDelete({
+      url_shorten_link: shortenLink,
+    });
+    return {
+      metadata: {
+        link: deletedLink,
       },
     };
   }

@@ -26,6 +26,14 @@ export class URLControllers {
       next(error);
     }
   }
+  static async deleteLink(req: Request, res: Response, next: NextFunction) {
+    const { shortenLink } = req.params;
+    try {
+      res.send(await URLServices.deleteLink(shortenLink));
+    } catch (error) {
+      next(error);
+    }
+  }
   static async updateLink(
     req: Request<{ shortenLink: string }, {}, { fullLink: string }, {}>,
     res: Response,
