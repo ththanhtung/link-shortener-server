@@ -6,10 +6,12 @@ import { validateRequest } from '../../middlewares/validateRequest';
 const urlRoutes = express.Router();
 
 urlRoutes.post(
-  '/',
+  '/url',
   [body('fullLink').notEmpty().withMessage('you must provide a link')],
   validateRequest,
   URLControllers.createNewShortenLink
 );
+
+urlRoutes.get('/url/:shortenLink', URLControllers.redirectShortenLink);
 
 export default urlRoutes;

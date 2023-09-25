@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid"
 import { BadRequestError } from "../errors/badReqError"
 import { URL } from "../models/url.model"
+import { NotFoundError } from "../errors/notFoundError"
 
 interface INewShortenLinkReq{
     fullLink: string
@@ -21,5 +22,20 @@ export class URLServices {
                 link: newShortenLink
             }
         }
+    }
+
+    static async redirectShortenLink(shortenLink: string){
+        if (shortenLink === ''){
+            throw new NotFoundError()
+        }
+        const link = await URL.findOne({
+            url_shorten_link: shortenLink
+        }).lean()
+
+        if (!link){
+            throw new NotFoundError()
+        }
+
+        return link.url_full_link
     }
 }
