@@ -6,11 +6,13 @@ const DOCUMENT_NAME = 'URL';
 interface URLAttrs {
   url_full_link: string;
   url_shorten_link: string;
+  url_is_active?: boolean;
 }
 
 interface URLDocs extends mongoose.Document {
   url_full_link: string;
   url_shorten_link: string;
+  url_is_active?: boolean;
 }
 
 interface URLModel extends mongoose.Model<URLDocs> {
@@ -27,6 +29,11 @@ const URLSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    url_is_active: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
   },
   {

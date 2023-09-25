@@ -44,7 +44,7 @@ export class URLServices {
   }
 
   static async getLinks() {
-    const links = await URL.find({});
+    const links = await URL.find({ url_is_active: true });
     return {
       metadata: {
         links,
@@ -76,6 +76,53 @@ export class URLServices {
     return {
       metadata: {
         link: deletedLink,
+      },
+    };
+  }
+  static async deActiveLink(shortenLink: string) {
+    if (shortenLink === ''){
+        throw new NotFoundError()
+    }
+    const updatedLink = await URL.findOneAndUpdate(
+      {
+        url_shorten_link: shortenLink,
+      },
+      {
+        $set: {
+          url_is_active: false,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return {
+      metadata: {
+        link: updatedLink,
+      },
+    };
+  }
+
+  static async activeLink(shortenLink: string) {
+     if (shortenLink === '') {
+       throw new NotFoundError();
+     }
+    const updatedLink = await URL.findOneAndUpdate(
+      {
+        url_shorten_link: shortenLink,
+      },
+      {
+        $set: {
+          url_is_active: true,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return {
+      metadata: {
+        link: updatedLink,
       },
     };
   }

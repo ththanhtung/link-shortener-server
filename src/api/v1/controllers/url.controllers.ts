@@ -34,6 +34,22 @@ export class URLControllers {
       next(error);
     }
   }
+  static async deActiveLink(req: Request, res: Response, next: NextFunction) {
+    const { shortenLink } = req.params;
+    try {
+      res.send(await URLServices.deActiveLink(shortenLink));
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async activeLink(req: Request, res: Response, next: NextFunction) {
+    const { shortenLink } = req.params;
+    try {
+      res.send(await URLServices.activeLink(shortenLink));
+    } catch (error) {
+      next(error);
+    }
+  }
   static async updateLink(
     req: Request<{ shortenLink: string }, {}, { fullLink: string }, {}>,
     res: Response,
